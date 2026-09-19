@@ -143,7 +143,11 @@ private fun CodeBlock(language: String?, code: String, live: Boolean = false) {
     // ever appends to the last block or adds new ones after it, so earlier blocks' slots (and
     // therefore their collapse state) stay stable. Forced expanded while live regardless of what
     // this holds, so a block always shows its content while it's actively being written.
-    var manuallyExpanded by remember { mutableStateOf(true) }
+    // Defaults collapsed — force-expanded only while `live` (still streaming). The moment a
+    // block finishes, `live` drops to false and, since this hasn't been manually toggled yet,
+    // it collapses on its own rather than staying open forever. Tapping the chevron still
+    // overrides this for as long as this composition lives.
+    var manuallyExpanded by remember { mutableStateOf(false) }
     val expanded = live || manuallyExpanded
     val chevronRotation by androidx.compose.animation.core.animateFloatAsState(
         targetValue = if (expanded) 180f else 0f, label = "chevron"

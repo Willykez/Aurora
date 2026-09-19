@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.ErrorOutline
@@ -68,9 +67,10 @@ private fun UserBubble(text: String, modifier: Modifier) {
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
             modifier = Modifier.fillMaxWidth(0.86f)
         ) {
-            SelectionContainer {
-                Text(text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp))
-            }
+            // Runs through the same renderer as assistant replies — previously this was a plain
+            // Text() with no markdown processing at all, so anything you typed with backticks,
+            // asterisks, etc. showed the literal punctuation instead of being styled.
+            MarkdownText(text, modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp))
         }
     }
 }
